@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import pdv.entity.Cliente;
 import pdv.entity.Funcionario;
+import pdv.entity.Produto;
 import pdv.entity.Venda;
 import pdv.repository.VendaRepository;
 
@@ -17,6 +18,9 @@ public class VendaService {
 
 	// Método para salvar uma venda
 	public String save(Venda venda) {
+		// Calcula o valor total da venda antes de salvar
+		double valorTotal = calcularValorTotal(venda.getProdutos());
+		venda.setValorTotal(valorTotal);
 		this.vendaRepository.save(venda);
 		return "Venda salva com sucesso!";
 	}
@@ -27,6 +31,11 @@ public class VendaService {
 		if (!vendaRepository.existsById(id)) {
 			throw new RuntimeException("Venda não encontrada!");
 		}
+		
+		// Verifica o status da venda antes de atualizar
+		verificarStatus(venda);
+		
+		// Define o ID da venda e salva no banco de dados
 		venda.setIdVenda(id);
 		this.vendaRepository.save(venda);
 		return "Venda atualizada com sucesso!";
@@ -65,6 +74,24 @@ public class VendaService {
 	// Método para consultar vendas por funcionário
 	public List<Venda> consultarVendasPorFuncionario(Funcionario funcionario) {
 		return vendaRepository.findByFuncionario(funcionario);
+	}
+	
+	// Método para calcular o valor total da venda com base na lista de produtos
+	double calcularValorTotal(List<Produto> produtos) {
+		double total = 0.0;
+		for (Produto produto : produtos) {
+			total += produto.getValor();
+		}
+		return total;
+	}
+	
+	// Método para verificar o status da venda antes de atualizar
+	void verificarStatus(Venda venda) {
+		if (venda.getStatus() != null && venda.getStatus().equalsIgnoreCase("CANCELADO")) {
+			// Se o status for "CANCELADO", define a lista de produtos como nula e o valor total como 0
+			venda.setProdutos(null);
+			venda.setValorTotal(0.0);
+		}
 	}
 
 }

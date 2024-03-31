@@ -37,6 +37,11 @@ public class Produto {
 	@ManyToMany(mappedBy = "produtos", cascade = CascadeType.ALL)
 	private List<Venda> vendas;
 
+	public Produto(String nomeProduto, Double valor) {
+        this.nomeProduto = nomeProduto;
+        this.valor = valor;
+    }
+	
 }
 
 //Ass: Guilherme Cunha da Cruz

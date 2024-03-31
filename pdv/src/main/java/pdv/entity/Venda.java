@@ -53,17 +53,11 @@ public class Venda {
     private Funcionario funcionario;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "venda_produto", joinColumns = @JoinColumn(name = "id_venda"), inverseJoinColumns = @JoinColumn(name = "id_produto"))
+    @JoinTable(name = "venda_produto", joinColumns = @JoinColumn(name = "id_venda"), inverseJoinColumns = @JoinColumn(name = "id_produtos"))
     private List<Produto> produtos;
 
-    // Método para obter o ID do cliente
-    public Long getIdCliente() {
-        return this.cliente != null ? this.cliente.getIdCliente() : null;
-    }
-
-    // Método para obter o ID do funcionário
-    public Long getIdFuncionario() {
-        return this.funcionario != null ? this.funcionario.getIdFuncionario() : null;
-    }
-
+    @NotBlank
+    private String status;
 }
+
+//Ass: Guilherme Cunha da Cruz

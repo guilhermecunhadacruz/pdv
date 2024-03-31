@@ -56,13 +56,6 @@ public class Cliente {
 	@OneToMany(mappedBy = "cliente")
 	private List<Venda> vendas;
 
-	public Long getIdCliente() {
-	    return this.idCliente;
-	}
-
-	public void setIdCliente(Long idCliente) {
-	    this.idCliente = idCliente;
-	}
 
 
 }

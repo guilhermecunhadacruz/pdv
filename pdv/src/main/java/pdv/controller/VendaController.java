@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pdv.entity.Cliente;
 import pdv.entity.Funcionario;
 import pdv.entity.Venda;
-import pdv.service.ClienteService;
 import pdv.service.VendaService;
 
 @RestController
@@ -27,6 +26,9 @@ public class VendaController {
 
     @Autowired
     private VendaService vendaService;
+    public VendaController(VendaService vendaService) {
+        this.vendaService = vendaService;
+    }
 
 
     // Método: GET
@@ -51,7 +53,8 @@ public class VendaController {
             Venda venda = this.vendaService.findById(id);
             return new ResponseEntity<>(venda, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        	e.printStackTrace(); // Log de erro no console
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -59,30 +62,15 @@ public class VendaController {
     // URL: http://localhost:8080/api/venda/save
     // Salva uma nova venda
     @PostMapping("/save")
-    public ResponseEntity<String> save(@RequestBody Venda venda) {
-        try {
-            // Verifica se o cliente na venda não é nulo
-            if (venda.getCliente() == null) {
-                // Obtém o cliente com base no ID fornecido
-                Cliente cliente = ClienteService.findById(venda.getIdCliente())
-                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o ID fornecido!"));
-                
-                // Define o cliente na venda
-                venda.setCliente(cliente);
-            }
-            
-            // Verifica se o funcionário na venda não é nulo
-            if (venda.getFuncionario() == null) {
-                throw new IllegalArgumentException("O funcionário não pode ser nulo!");
-            }
-
-            // Salva a venda
-            String mensagem = this.vendaService.save(venda);
-            return new ResponseEntity<String>(mensagem, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<String>("Erro ao salvar a venda: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+	public ResponseEntity<String> save(@RequestBody Venda venda) {
+		try {
+			String mensagem = this.vendaService.save(venda);
+			return new ResponseEntity<String>(mensagem, HttpStatus.CREATED);
+		} catch (Exception e) {
+			e.printStackTrace(); // Log de erro no console
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 
 
 
@@ -179,3 +167,5 @@ public class VendaController {
     }
 }
 
+
+//Ass: Guilherme Cunha da Cruz
