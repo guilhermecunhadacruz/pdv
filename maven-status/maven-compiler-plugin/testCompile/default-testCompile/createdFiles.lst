@@ -1,0 +1,7 @@
+pdv\controller\FuncionarioControllerTest.class
+pdv\controller\ProdutoControllerTest.class
+pdv\service\VendaServiceTest.class
+pdv\controller\VendaControllerTest.class
+pdv\controller\ClienteControllerTest.class
+pdv\ApplicationTests.class
+pdv\service\ProdutoServiceTest.class
